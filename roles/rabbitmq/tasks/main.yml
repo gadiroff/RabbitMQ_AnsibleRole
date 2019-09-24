@@ -1,0 +1,4 @@
+# ansible/roles/rabbitmq/tasks/main.yml
+- name: Basic system update and setup software
+  import_tasks: install.yml
+

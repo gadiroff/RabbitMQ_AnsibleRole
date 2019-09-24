@@ -1,0 +1,48 @@
+---
+# Installing Rabbit MQ
+
+- name: Add Rabbit MQ apt key ..
+  apt_key:
+   url: "https://www.rabbitmq.com/rabbitmq-release-signing-key.asc"  
+   state: present
+
+
+- name: Adding Rabbit MQ repo ..
+  apt_repository:
+   repo: deb http://www.rabbitmq.com/debian/ testing main
+   state: present
+
+
+- name: Install Rabbit MQ ..
+  apt:
+   name: rabbitmq-server
+   update_cache: yes
+
+  
+- name: Starting Rabbit MQ ..
+  service:
+   name: rabbitmq-server
+   state: started
+   enabled: yes
+
+- name: Enable rabbitmq plugins ..
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled
+
+
+- name: Add rabbitmq users admin ..
+  rabbitmq_user:
+    user: admin
+    password: admin123!
+    vhost: /
+    tags: administrator
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: Restart service
+  service:
+   name: rabbitmq-server
+   state: restarted
